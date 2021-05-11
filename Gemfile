@@ -12,6 +12,7 @@ gem 'active_model_serializers'
 gem 'bcrypt'
 gem 'bootsnap', '>= 1.4.4', require: false
 gem 'jwt'
+gem 'pundit'
 gem 'rack-cors'
 
 # Use Active Storage variant
@@ -21,6 +22,7 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails'
   gem 'fabrication'
+  gem 'faker'
 end
 
 group :development do
