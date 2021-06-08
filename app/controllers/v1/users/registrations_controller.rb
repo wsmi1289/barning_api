@@ -1,9 +1,17 @@
 module V1
   module Users
     class RegistrationsController < ProtectedController
-      skip_before_action :require_authorization, only: [:create]
+      skip_before_action :require_authentication, only: [:create]
       def create
-        user = User.create(user_params)
+        user = User.new(user_params)
+        if user.save
+          response.set_cookie(
+            'jwt',
+            value: JwtToken.encode(user),
+            httponly: true,
+            secure: Rails.env.production?
+          )
+
         render json: user, status: :created
       end
 

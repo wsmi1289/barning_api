@@ -1,19 +1,21 @@
 module V1
   module Users
     class SessionsController < ProtectedController
-      include ActionController::HttpAuthentication::Basic::ControllerMethods
+      skip_before_action :require_authentication, only: [:create]
+      protect_from_forgery except: [:create]
 
-      skip_before_action :require_authorization, only: [:create]
+      def current
+        decoded = JwtToken.decode(cookies.signed[:jwt])
+      end
+
       def create
-        authenticate_with_http_basic do |email, password|
-          user = User.find_by email: email
-
-          if user&.authenticate(password)
-
-            render json: JwtToken.encode(user), status: :created and return
-          end
+        user = User.find_by(email: params[:email])
+        if user && user.authenticate(params[:password])
+          session[:jwt] = JwtToken.encode(user)
+          render json: user, status: :created
+        else
+          render status: :unauthorized
         end
-        render status: :unauthorized
       end
 
       def destroy

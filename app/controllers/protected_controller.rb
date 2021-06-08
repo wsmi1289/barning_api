@@ -1,5 +1,5 @@
 class ProtectedController < ApplicationController
   include JwtAuthentication
-  before_action :require_authorization
+  before_action :require_authentication
   
 end

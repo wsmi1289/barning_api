@@ -3,7 +3,7 @@ module JwtAuthentication
 
   include ActionController::HttpAuthentication::Token
   
-  def require_authorization
+  def require_authentication
     !token || !valid_token
   end
 
@@ -14,7 +14,10 @@ module JwtAuthentication
   protected
 
   def valid_token
-    return true if decode_token
+    if decode_token
+      session[:jwt] = JwtToken.encode(current_user)
+      return true
+    end
   rescue
     render_forbidden
   end
@@ -32,6 +35,6 @@ module JwtAuthentication
   end
 
   def token
-    @_token ||= params[:token] || token_and_options(request).first
+    @_token ||= session[:jwt]
   end
 end
