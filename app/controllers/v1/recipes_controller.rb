@@ -8,7 +8,7 @@ module V1
 
     def update
       if @recipe.update(recipe_params)
-        render json: @recipe
+        render json: @recipe, include: ['recipe_ingredients', 'recipe_ingredients.ingredient']
       else
         render json: { errors: @recipe.errors.full_messages }
       end
@@ -16,13 +16,19 @@ module V1
 
     def destroy
       @recipe.destroy!
-      render json: @recipe
+      render json: @recipe, include: ['recipe_ingredients', 'recipe_ingredients.ingredient']
     end
 
     private
 
     def set_recipe
       @recipe = Recipe.find(params[:id])
+    end
+
+    def recipe_params
+      params.permit(:description, :directions, :name, recipe_ingredients_attributes: [
+        :id, :amount, :scale, :recipe_id, :ingredient_id
+      ])
     end
   end
 end

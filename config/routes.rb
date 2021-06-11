@@ -8,6 +8,9 @@ Rails.application.routes.draw do
       resources :registrations, only: [:create]
     end
 
-    resources :recipes, only: [:index, :destroy]
+    resources :recipes, only: [:index, :update, :destroy]
+    resources :recipe_ingredients, only: [:destroy]
+    resources :scales, only: [:index]
+    resources :ingredients, only: [:index]
   end
 end

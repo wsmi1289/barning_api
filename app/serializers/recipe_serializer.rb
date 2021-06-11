@@ -4,7 +4,7 @@ class RecipeSerializer < ActiveModel::Serializer
   has_many :recipe_ingredients
 
   class RecipeIngredientSerializer < ActiveModel::Serializer
-    attributes :id, :amount, :scale
+    attributes :id, :amount, :scale, :recipe_id, :ingredient_id
 
     has_one :ingredient
 
